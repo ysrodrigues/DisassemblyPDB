@@ -22,6 +22,11 @@ void MainWindow::on_actionSelect_File_triggered()
 
     fileName = QFileDialog::getOpenFileNames(this, tr("Open PDB File"), QStandardPaths::displayName(QStandardPaths::HomeLocation), tr("PDB File (*.pdb)"));
 
+    ui->progressBar->setMaximum(fileName.size());
+    int count = 0;
+
+    ui->response->setText("Running !!!");
+
     for(it = fileName.constBegin(); it != fileName.constEnd(); ++it)
     {
         QString name = (*it).toLocal8Bit().constData();
@@ -41,5 +46,11 @@ void MainWindow::on_actionSelect_File_triggered()
         }
 
         f.close();
+
+        ++count;
+        ui->progressBar->setValue(count);
+
     }
+
+    ui->response->setText("Finish !!!");
 }

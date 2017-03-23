@@ -34,7 +34,6 @@ void Disassembly::process(QString line)
         if(count == 0)
             QFile::remove(modelFileName);
 
-
         ++count;
     }
 }

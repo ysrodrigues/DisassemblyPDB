@@ -24,16 +24,18 @@ void MainWindow::on_actionSelect_File_triggered()
 
     for(it = fileName.constBegin(); it != fileName.constEnd(); ++it)
     {
-        f.setFileName((*it).toLocal8Bit().constData());
+        QString name = (*it).toLocal8Bit().constData();
+        f.setFileName(name);
         if(!f.open(QIODevice::ReadOnly |  QIODevice::Text))
             return;
 
-        d.setName((*it).toLocal8Bit().constData());
+        QString dname = name.split("/").last();
+        d.setName(dname);
 
         QTextStream read(&f);
         while(!read.atEnd())
         {
-            QString line = read.readLine();
+            QString line = read.readAll();
 
             d.process(line);
         }

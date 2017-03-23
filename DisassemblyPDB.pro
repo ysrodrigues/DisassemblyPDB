@@ -20,3 +20,5 @@ HEADERS  += mainwindow.h \
     disassembly.h
 
 FORMS    += mainwindow.ui
+
+CONFIG += console

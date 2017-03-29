@@ -22,35 +22,38 @@ void MainWindow::on_actionSelect_File_triggered()
 
     fileName = QFileDialog::getOpenFileNames(this, tr("Open PDB File"), QStandardPaths::displayName(QStandardPaths::HomeLocation), tr("PDB File (*.pdb)"));
 
-    ui->progressBar->setMaximum(fileName.size());
-    int count = 0;
-
-    ui->response->setText("Running !!!");
-
-    for(it = fileName.constBegin(); it != fileName.constEnd(); ++it)
+    if(!fileName.isEmpty())
     {
-        QString name = (*it).toLocal8Bit().constData();
-        f.setFileName(name);
-        if(!f.open(QIODevice::ReadOnly |  QIODevice::Text))
-            return;
+        ui->progressBar->setMaximum(fileName.size());
+        int count = 0;
 
-        QString dname = name.split("/").last();
-        d.setName(dname);
+        ui->response->setText("Running !!!");
 
-        QTextStream read(&f);
-        while(!read.atEnd())
+        for(it = fileName.constBegin(); it != fileName.constEnd(); ++it)
         {
-            QString line = read.readAll();
+            QString name = (*it).toLocal8Bit().constData();
+            f.setFileName(name);
+            if(!f.open(QIODevice::ReadOnly |  QIODevice::Text))
+                return;
 
-            d.process(line);
+            QString dname = name.split("/").last();
+            d.setName(dname);
+
+            QTextStream read(&f);
+            while(!read.atEnd())
+            {
+                QString line = read.readAll();
+
+                d.process(line);
+            }
+
+            f.close();
+
+            ++count;
+            ui->progressBar->setValue(count);
+
         }
 
-        f.close();
-
-        ++count;
-        ui->progressBar->setValue(count);
-
+        ui->response->setText("Finish !!!");
     }
-
-    ui->response->setText("Finish !!!");
 }
